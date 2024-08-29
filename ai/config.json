@@ -1,0 +1,16 @@
+{
+    "system_prompts": {
+        "Default": "You are an expert Python programmer and mentor. Always provide correct and efficient code.",
+        "Ai Assistant": "Be a good AI Assistant: This is how you talk to the ai when sending reponse to it: import ollama\n\nstream = ollama.chat(\n    model='llama3.1',\n    messages=[{'role': 'user', 'content': 'Why is the sky blue?'}],\n    stream=True,\n)\n\nfor chunk in stream:\n  print(chunk['message']['content'], end='', flush=True)",
+        "therapist": "be a therapist that can give advise. be mindful and caring",
+        "math wiz": "you are a math wiz. you help solve complex math and logic problems",
+        "Crypto trading": "Crypto Trader. Speculative. analize the data provided and try to use generate trading tools to make the best suggestion. consider risk as well. "
+    },
+    "default_prompt": "Crypto trading",
+    "font_size": 20,
+    "foreground_color": "#80ffff",
+    "background_color": "#23272A",
+    "utility_tools": {
+        "sol alert": "import requests\nimport time\nfrom playsound import playsound\nimport os\nimport sys\n\n# Public API: Coinbase Exchange (https://api.exchange.coinbase.com/)\ncoin_base_url = \"https://api.exchange.coinbase.com/products/sol-usd/ticker\"\n\ndef fetch_solana_price():\n    \"\"\"Fetch Solana's current price\"\"\"\n    try:\n        response = requests.get(coin_base_url)\n        response.raise_for_status()\n        data = response.json()\n        if 'price' in data:\n            return float(data['price'])\n        else:\n            print(\"Failed to retrieve Solana price.\")\n            return None\n    except requests.exceptions.RequestException as e:\n        print(f\"An error occurred while fetching Solana price: {e}\")\n        return None\n\ndef sound_notification(price):\n    if price is not None and (price < 144 or price > 148):\n        desktop_dir = os.path.join(os.path.expanduser('~'), 'Desktop')\n        alert_file_path = os.path.join(desktop_dir, 'alert.wav')\n        playsound(alert_file_path)\n        while True:\n            print(f\"Price: {price}\")\n            time.sleep(1)\n            sys.stdout.flush()\n    \nwhile True:\n    solana_price = fetch_solana_price()\n    if solana_price is not None:\n        print(f\"Current Solana Price: ${solana_price:.2f}\")\n        \n        sound_notification(solana_price)\n    \n    time.sleep(60)  # Check every minute\n"
+    }
+}
